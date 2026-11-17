@@ -8,50 +8,52 @@
 :root {
   color-scheme: dark;
 
-  /* Surfaces — night blue */
-  --bg: #080b1a;
-  --bg-elevated: #0e1328;
-  --surface: #121834;
-  --surface-hover: #182041;
-  --border: rgb(196 181 253 / 0.1);
-  --border-strong: rgb(196 181 253 / 0.2);
+  /* Midnight Lavender — surfaces */
+  --bg: #080d1b;
+  --bg-elevated: #0d1426;
+  --surface: #121a30;
+  --surface-hover: #172039;
+  --border: rgb(167 139 250 / 0.1);
+  --border-strong: rgb(167 139 250 / 0.22);
 
   /* Text */
-  --fg: #eceaf7;
-  --fg-muted: #a3a6c4;
-  --fg-subtle: #6f7398;
+  --fg: #e8eaf4;
+  --fg-muted: #a4a9c3;
+  --fg-subtle: #838aa8;
 
-  /* Brand — purple & lilac */
-  --primary: #8b6cf6;
-  --primary-fg: #0b0820;
-  --accent: #c4b5fd;
-  --accent-soft: rgb(139 108 246 / 0.12);
-  --glow: rgb(124 92 255 / 0.18);
+  /* Brand */
+  --primary: #a78bfa;
+  --primary-fg: #0b0a1f;
+  --accent: #6c63ff;
+  --accent-text: #a78bfa;
+  --accent-soft: rgb(167 139 250 / 0.1);
+  --glow: rgb(108 99 255 / 0.2);
 
-  --ring: #c4b5fd;
+  --ring: #a78bfa;
 }
 
 [data-theme="light"] {
   color-scheme: light;
 
-  --bg: #f7f6fc;
+  --bg: #f6f6fb;
   --bg-elevated: #ffffff;
   --surface: #ffffff;
-  --surface-hover: #f1eefc;
-  --border: rgb(40 30 90 / 0.1);
-  --border-strong: rgb(40 30 90 / 0.18);
+  --surface-hover: #f1effb;
+  --border: rgb(30 27 75 / 0.1);
+  --border-strong: rgb(30 27 75 / 0.18);
 
-  --fg: #14142b;
-  --fg-muted: #4e5070;
-  --fg-subtle: #7b7d9c;
+  --fg: #121629;
+  --fg-muted: #4a4f6a;
+  --fg-subtle: #636884;
 
-  --primary: #6a45e8;
+  --primary: #5b4fe0;
   --primary-fg: #ffffff;
-  --accent: #6a45e8;
-  --accent-soft: rgb(106 69 232 / 0.08);
-  --glow: rgb(124 92 255 / 0.12);
+  --accent: #6c63ff;
+  --accent-text: #5b4fe0;
+  --accent-soft: rgb(108 99 255 / 0.08);
+  --glow: rgb(108 99 255 / 0.12);
 
-  --ring: #6a45e8;
+  --ring: #5b4fe0;
 }
 
 @theme inline {
@@ -67,13 +69,14 @@
   --color-primary: var(--primary);
   --color-primary-fg: var(--primary-fg);
   --color-accent: var(--accent);
+  --color-accent-text: var(--accent-text);
   --color-accent-soft: var(--accent-soft);
   --color-ring: var(--ring);
 
-  /* Typography — Geist for text, Instrument Serif for a single accent, Geist Mono for labels */
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+  /* Typography — Space Grotesk for headings, Inter for text, JetBrains Mono for labels */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-inter), ui-sans-serif, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -91,6 +94,13 @@
     font-family: var(--font-sans);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
   }
 
   ::selection {
@@ -168,6 +178,12 @@
     background:
       radial-gradient(60rem 30rem at 15% -10%, var(--glow), transparent 60%),
       radial-gradient(40rem 24rem at 95% 10%, color-mix(in oklab, var(--glow) 60%, transparent), transparent 65%);
+  }
+
+  .cover-glow {
+    background:
+      radial-gradient(120% 90% at 85% 0%, var(--glow), transparent 55%),
+      radial-gradient(80% 70% at 0% 100%, color-mix(in oklab, var(--glow) 50%, transparent), transparent 60%);
   }
 
   .hairline {

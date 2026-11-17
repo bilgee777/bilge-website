@@ -1,15 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { Locale } from "@/i18n/config";
+import { switchLocalePath } from "@/i18n/routes";
 
+/** Switches to the same page in the other language. */
 export function LanguageSwitcher({ locale, label }: { locale: Locale; label: string }) {
+  const pathname = usePathname() ?? `/${locale}`;
   const target: Locale = locale === "tr" ? "en" : "tr";
   return (
     <Link
-      href={`/${target}`}
+      href={switchLocalePath(pathname, target)}
       hrefLang={target}
-      lang={target}
       aria-label={label}
       title={label}
       onClick={() => {

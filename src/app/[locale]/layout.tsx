@@ -1,8 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
-import { about, person, skillGroups, education } from "@/content/profile";
-import { isLocale, locales, ogLocale, type Locale } from "@/i18n/config";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { education } from "@/content/education";
+import { hero, person } from "@/content/person";
+import { skillGroups } from "@/content/skills";
+import { isLocale, locales, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { fontVariables } from "@/lib/fonts";
 import { known, siteUrl } from "@/lib/site";
@@ -16,7 +20,7 @@ export function generateStaticParams() {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#080b1a",
+  themeColor: "#080d1b",
   colorScheme: "dark light",
 };
 
@@ -24,43 +28,22 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const { locale } = await params;
   if (!isLocale(locale)) return {};
   const dict = getDictionary(locale);
-  const other = locales.find((l) => l !== locale)!;
-
   return {
     metadataBase: new URL(siteUrl),
-    title: dict.meta.title,
+    title: { default: dict.meta.siteTitle, template: `%s — ${person.name}` },
     description: dict.meta.description,
-    applicationName: `${person.name} — Portfolio`,
-    authors: [{ name: person.name }],
+    applicationName: person.name,
+    authors: [{ name: person.name, url: person.linkedin }],
     creator: person.name,
     keywords: [
       person.name,
       "Software Engineer",
-      "Yazılım Mühendisi",
-      "iOS Developer",
       "Mobile Developer",
-      ...skillGroups.flatMap((g) => g.items),
+      "iOS Developer",
+      "React Native Developer",
+      "AI Integration",
+      ...new Set(skillGroups.flatMap((g) => g.items.map((i) => i.name))),
     ],
-    alternates: {
-      canonical: `/${locale}`,
-      languages: { tr: "/tr", en: "/en", "x-default": "/tr" },
-    },
-    openGraph: {
-      type: "profile",
-      url: `/${locale}`,
-      siteName: person.name,
-      title: dict.meta.title,
-      description: dict.meta.description,
-      locale: ogLocale[locale],
-      alternateLocale: [ogLocale[other]],
-      firstName: "Bilge",
-      lastName: "Korkmaz",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: dict.meta.title,
-      description: dict.meta.description,
-    },
     robots: { index: true, follow: true },
   };
 }
@@ -68,34 +51,44 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 const themeScript = `(function(){var d=document.documentElement;d.classList.add('js');try{if(localStorage.getItem('theme')==='light')d.dataset.theme='light'}catch(e){}})();`;
 
 function personJsonLd(locale: Locale) {
-  const sameAs = [known(person.github), known(person.linkedin)].filter(Boolean);
+  const sameAs = [person.linkedin, known(person.github)].filter(Boolean);
   return {
     "@context": "https://schema.org",
     "@type": "Person",
     name: person.name,
     jobTitle: person.title[locale],
+    description: hero.description[locale],
     url: `${siteUrl}/${locale}`,
     email: `mailto:${person.email}`,
-    alumniOf: education.map((e) => ({ "@type": "CollegeOrUniversity", name: e.institution })),
-    knowsAbout: [...about.focusAreas.map((a) => a[locale]), ...skillGroups.flatMap((g) => g.items)],
-    ...(sameAs.length ? { sameAs } : {}),
+    address: { "@type": "PostalAddress", addressLocality: "Istanbul", addressCountry: "TR" },
+    alumniOf: education.map((e) => ({ "@type": "CollegeOrUniversity", name: e.institution[locale] })),
+    knowsAbout: [...new Set(skillGroups.flatMap((g) => g.items.map((i) => i.name)))],
+    sameAs,
   };
 }
 
 export default async function LocaleLayout({ children, params }: { children: ReactNode; params: Params }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
+  const dict = getDictionary(locale);
 
   return (
     <html lang={locale} className={fontVariables} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd(locale)) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd(locale)) }} />
       </head>
-      <body>{children}</body>
+      <body>
+        <a
+          href="#main"
+          className="sr-only rounded-full bg-primary px-4 py-2 text-sm text-primary-fg focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60]"
+        >
+          {dict.a11y.skip}
+        </a>
+        <Header locale={locale} dict={dict} name={person.name} />
+        <main id="main">{children}</main>
+        <Footer locale={locale} dict={dict} />
+      </body>
     </html>
   );
 }

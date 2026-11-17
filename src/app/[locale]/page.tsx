@@ -1,43 +1,58 @@
-import { notFound } from "next/navigation";
-import { About } from "@/components/About";
-import { Contact } from "@/components/Contact";
-import { Education } from "@/components/Education";
-import { Experience } from "@/components/Experience";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
+import type { Metadata } from "next";
+import { ContactPanel } from "@/components/ContactPanel";
+import { ExperienceTimeline } from "@/components/ExperienceTimeline";
 import { Hero } from "@/components/Hero";
-import { Projects } from "@/components/Projects";
-import { Skills } from "@/components/Skills";
-import { person } from "@/content/profile";
-import { isLocale } from "@/i18n/config";
-import { getDictionary } from "@/i18n/dictionaries";
+import { ProjectCard } from "@/components/ProjectCard";
+import { Reveal } from "@/components/Reveal";
+import { Section } from "@/components/Section";
+import { SectionHeading } from "@/components/SectionHeading";
+import { href } from "@/i18n/routes";
 import { getCvHref } from "@/lib/cv";
+import { pageMetadata } from "@/lib/metadata";
+import { resolveLocale, type LocaleParams } from "@/lib/page";
+import { visibleProjects } from "@/lib/visible";
 
-export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params;
-  if (!isLocale(locale)) notFound();
-  const dict = getDictionary(locale);
+export async function generateMetadata({ params }: { params: LocaleParams }): Promise<Metadata> {
+  const { locale } = await resolveLocale(params);
+  return pageMetadata(locale, "", { type: "profile" });
+}
+
+export default async function HomePage({ params }: { params: LocaleParams }) {
+  const { locale, dict } = await resolveLocale(params);
   const cvHref = getCvHref(locale);
 
   return (
     <>
-      <a
-        href="#main"
-        className="sr-only rounded-full bg-primary px-4 py-2 text-sm text-primary-fg focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60]"
-      >
-        {dict.a11y.skip}
-      </a>
-      <Header locale={locale} dict={dict} name={person.name} />
-      <main id="main">
-        <Hero locale={locale} dict={dict} cvHref={cvHref} />
-        <About locale={locale} dict={dict} />
-        <Skills locale={locale} dict={dict} />
-        <Experience locale={locale} dict={dict} />
-        <Projects locale={locale} dict={dict} />
-        <Education locale={locale} dict={dict} />
-        <Contact locale={locale} dict={dict} cvHref={cvHref} />
-      </main>
-      <Footer dict={dict} />
+      <Hero locale={locale} dict={dict} cvHref={cvHref} />
+
+      <Section id="projects" labelledBy="projects-title" className="border-t border-border">
+        <SectionHeading
+          id="projects-title"
+          title={dict.home.selectedWork}
+          lead={dict.home.selectedWorkLead}
+          action={{ href: href(locale, "projects"), label: dict.common.viewAll }}
+        />
+        <ul className="grid gap-5 md:grid-cols-2">
+          {visibleProjects().map((project, i) => (
+            <Reveal as="li" key={project.slug} delay={(i % 2) * 80}>
+              <ProjectCard project={project} locale={locale} dict={dict} />
+            </Reveal>
+          ))}
+        </ul>
+      </Section>
+
+      <Section id="experience" labelledBy="experience-title" className="bg-bg-elevated/40">
+        <SectionHeading
+          id="experience-title"
+          title={dict.home.experienceTitle}
+          action={{ href: href(locale, "experience"), label: dict.common.viewAll }}
+        />
+        <ExperienceTimeline locale={locale} dict={dict} compact />
+      </Section>
+
+      <Section id="contact" labelledBy="contact-title">
+        <ContactPanel locale={locale} dict={dict} cvHref={cvHref} lead={dict.home.contactLead} />
+      </Section>
     </>
   );
 }

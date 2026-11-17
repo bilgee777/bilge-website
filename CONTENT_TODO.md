@@ -1,32 +1,40 @@
-# Content checklist
+# Pre-launch checklist
 
-Everything below is **missing or unconfirmed**. Edit `src/content/profile.ts` (run `npm run content:todos` for line numbers).
-Replace a `todo("…")` only with real, verifiable information — never with estimates.
+Run `npm run content:todos` for exact file/line locations. Replace a `todo("…")` only with confirmed information.
 
-## Profile & links
-- [ ] **Email** — `korkmazbilge814@gmail.com` was taken from the old site. Confirm it is still current.
-- [ ] **GitHub** profile URL
-- [ ] **LinkedIn** profile URL
-- [ ] **Location** to show in the hero (optional)
-- [ ] **CV PDFs** → `public/cv/bilge-korkmaz-cv-tr.pdf`, `public/cv/bilge-korkmaz-cv-en.pdf`
-- [ ] **Domain** → `NEXT_PUBLIC_SITE_URL` on Vercel
-- [ ] Review the **hero** and **About** texts (drafted only from the information provided)
-- Phone number from the old site was intentionally **not** published.
+## Links & documents
+- [ ] **GitHub** — add the verified profile URL in `src/content/person.ts` (button appears automatically)
+- [ ] **CV (TR / EN)** — add `public/cv/bilge-korkmaz-cv-tr.pdf` and `public/cv/bilge-korkmaz-cv-en.pdf`
+- [ ] **Domain** — set `NEXT_PUBLIC_SITE_URL` on Vercel once a custom domain is used
 
-## Experience (İhlas Holding, Solon Yazılım, IQB Solutions, YÜKSİ)
-For each: start–end dates, employment type, a 1–2 sentence summary, technologies used.
-- [ ] Re-order newest-first once dates are known (currently in the order given).
+## Confidentiality / permissions
+- [ ] **KargoIO** — confirm with YÜKSİ that the general description and contribution list may be public
+      (if not: set `visibility: "draft"` in `projects.ts`)
+- [ ] **AI Road Assistant** — same confirmation as KargoIO
+- [ ] **Port Operations Simulation** — screenshots only if Solon Yazılım approves
 
-## Projects
-| Project | Missing |
-|---|---|
-| KargoIO | description, your role, status, stack, public links |
-| AI Yol Asistanı | description, AI service/model used, status, stack, links |
-| Unity Liman Simülasyonu | description/context, status, links (C# if confirmed) |
-| Tır Park Etme Oyunu | description, platform, status, engine/language, links |
-| FrameLab | planned scope; confirm stack (Swift / SwiftUI / Core Image?). **Status stays “in development”, no store link.** |
+## Case-study content (not provided yet — hidden in production)
+- [ ] Engineering decisions for every project
+- [ ] Key learnings for every project
+- [ ] Review DRAFT problem / solution texts (KargoIO, AI Road Assistant, Port Operations Simulation, Truck Parking Simulator)
+- [ ] AI Road Assistant — development status
+- [ ] Truck Parking Simulator — problem/goal, screenshots, optional video/repo link
+- [ ] FrameLab — what is already implemented, which technologies are already used (move from "planned"), screenshots when ready
 
-## Education & certifications
-- [ ] Degree level and whether graduated or ongoing
-- [ ] Start / graduation years
-- [ ] Certifications (or confirm there are none; the block is hidden when empty)
+## Experience
+- [ ] Solon Yazılım — optional: date the internship ended / part-time role started
+
+## Training & certifications
+- [ ] iOS Development Training — provider and year
+- [ ] Temel SQL Eğitimi (KTÜ Kariyer Merkezi) — year + verification link, then set `verified: true`
+- [ ] TechCamp2 — organiser, year, link, then set `verified: true`
+
+## Copy review
+- [ ] About page paragraphs (`person.ts`) — drafted from confirmed facts, review wording
+
+## Done
+- [x] Email `korkmazbilge777@gmail.com`, LinkedIn, location
+- [x] Education: B.Sc. Computer Engineering, 2022–2026, graduated (no student wording anywhere)
+- [x] Experience newest first; YÜKSİ ends Nov 2026 (not "present"); İhlas Holding removed
+- [x] FrameLab shown as in development; planned features/technologies labelled as planned
+- [x] Phone number not published

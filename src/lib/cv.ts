@@ -1,7 +1,7 @@
 import "server-only";
 import fs from "node:fs";
 import path from "node:path";
-import { person } from "@/content/profile";
+import { person } from "@/content/person";
 import type { Locale } from "@/i18n/config";
 
 /**
